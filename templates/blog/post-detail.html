@@ -15,7 +15,6 @@
 {% endrow %}
 {% row %}
     {% col %}
-      {% cache 3600 recent_posts %}
         {% cache 3600 recent_posts post %}
       {% endcache %}
     {% endcol %}
@@ -26,4 +25,5 @@
 
     {% endcol %}
 {% endrow %}
+
 {% endblock %}
