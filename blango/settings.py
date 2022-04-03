@@ -46,6 +46,12 @@ class Dev(Configuration):
     ACCOUNT_ACTIVATION_DAYS = 7
     # REGISTRATION_OPEN = False
 
+    SITE_ID = 1
+    ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+    ACCOUNT_EMAIL_REQUIRED = True
+    ACCOUNT_USERNAME_REQUIRED = False
+    ACCOUNT_AUTHENTICATION_METHOD = "email"
+
 
     LOGGING = {
         "version": 1,
@@ -114,6 +120,11 @@ class Dev(Configuration):
         "blango_auth",
         'blog',
         "debug_toolbar",
+        "django.contrib.sites",
+        "allauth", 
+        "allauth.account", 
+        "allauth.socialaccount", 
+        "allauth.socialaccount.providers.google",
         
     ]
 
