@@ -35,69 +35,7 @@ class Dev(Configuration):
     DEBUG = True
 
     ALLOWED_HOSTS = values.ListValue(["localhost", "0.0.0.0", ".codio.io"])
-    X_FRAME_OPTIONS = 'ALLOW-FROM ' + os.environ.get('CODIO_HOSTNAME') + '-8000.codio.io'
-    CSRF_COOKIE_SAMESITE = None
-    CSRF_TRUSTED_ORIGINS = [os.environ.get('CODIO_HOSTNAME') + '-8000.codio.io']
-    CSRF_COOKIE_SECURE = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SAMESITE = 'None'
-    SESSION_COOKIE_SAMESITE = 'None'
 
-    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-    ACCOUNT_ACTIVATION_DAYS = 7
-    # REGISTRATION_OPEN = False
-
-    SITE_ID = 1
-    ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-    ACCOUNT_EMAIL_REQUIRED = True
-    ACCOUNT_USERNAME_REQUIRED = False
-    ACCOUNT_AUTHENTICATION_METHOD = "email"
-
-
-    LOGGING = {
-        "version": 1,
-        "disable_existing_loggers": False,
-        "filters": {
-            "require_debug_false": {
-                "()": "django.utils.log.RequireDebugFalse",
-            },
-        },
-        "formatters": {
-            "verbose": {
-                "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
-                "style": "{",
-            },
-        },
-        "handlers": {
-            "console": {
-                "class": "logging.StreamHandler",
-                "stream": "ext://sys.stdout",
-                "formatter": "verbose",
-            },
-            "mail_admins": {
-                "level": "ERROR",
-                "class": "django.utils.log.AdminEmailHandler",
-                "filters": ["require_debug_false"],
-            },
-        #    "file": {
-        #         "class": "logging.FileHandler", 
-        #         "filename": "/var/log/blango.log",
-        #         "formatter": "verbose",
-        #        },
-
-        },
-        "loggers": {
-            "django.request": {
-                "handlers": ["mail_admins"],
-                "level": "ERROR",
-                "propagate": True,
-            },
-        },
-        "root": {
-            "handlers": ["console"],
-            "level": "DEBUG",
-        },
-        }
 
     PASSWORD_HASHERS = [
       'django.contrib.auth.hashers.Argon2PasswordHasher',
@@ -129,6 +67,7 @@ class Dev(Configuration):
         "rest_framework",
         "rest_framework.authtoken",
         "django_filters",
+        "versatileimagefield",
         
     ]
 
@@ -143,49 +82,9 @@ class Dev(Configuration):
         # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
     ]
 
-    REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.BasicAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ],
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
-    ],
 
-    "DEFAULT_THROTTLE_CLASSES": [
-        "blog.api.throttling.AnonSustainedThrottle",
-        "blog.api.throttling.AnonBurstThrottle",
-        "blog.api.throttling.UserSustainedThrottle",
-        "blog.api.throttling.UserBurstThrottle",
-    ],
-    "DEFAULT_THROTTLE_RATES": {
-        "anon_sustained": "500/day",
-        "anon_burst": "10/minute",
-        "user_sustained": "5000/day",
-        "user_burst": "100/minute",
-    },
-    
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-        "PAGE_SIZE": 2,
 
-    "DEFAULT_FILTER_BACKENDS": [
-            "django_filters.rest_framework.DjangoFilterBackend",
-            "rest_framework.filters.OrderingFilter",
-        
-        ],    
-    
-    }
 
-    SIMPLE_JWT = {
-        "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
-        "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
-    }
-
-    INTERNAL_IPS = ["192.168.10.226"]
-
-    ROOT_URLCONF = 'blango.urls'
 
     TEMPLATES = [
         {
@@ -266,8 +165,117 @@ class Dev(Configuration):
 
     DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+    X_FRAME_OPTIONS = 'ALLOW-FROM ' + os.environ.get('CODIO_HOSTNAME') + '-8000.codio.io'
+    CSRF_COOKIE_SAMESITE = None
+    CSRF_TRUSTED_ORIGINS = [os.environ.get('CODIO_HOSTNAME') + '-8000.codio.io']
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SAMESITE = 'None'
+    SESSION_COOKIE_SAMESITE = 'None'
+    
     CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
     CRISPY_TEMPLATE_PACK = "bootstrap5"
+    
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "filters": {
+            "require_debug_false": {
+                "()": "django.utils.log.RequireDebugFalse",
+            },
+        },
+        "formatters": {
+            "verbose": {
+                "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+                "style": "{",
+            },
+        },
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+                "stream": "ext://sys.stdout",
+                "formatter": "verbose",
+            },
+            "mail_admins": {
+                "level": "ERROR",
+                "class": "django.utils.log.AdminEmailHandler",
+                "filters": ["require_debug_false"],
+            },
+        #    "file": {
+        #         "class": "logging.FileHandler", 
+        #         "filename": "/var/log/blango.log",
+        #         "formatter": "verbose",
+        #        },
+
+        },
+        "loggers": {
+            "django.request": {
+                "handlers": ["mail_admins"],
+                "level": "ERROR",
+                "propagate": True,
+            },
+        },
+        "root": {
+            "handlers": ["console"],
+            "level": "DEBUG",
+        },
+        }
+
+    INTERNAL_IPS = ["192.168.10.226"]
+    ROOT_URLCONF = 'blango.urls'
+
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    ACCOUNT_ACTIVATION_DAYS = 7
+    # REGISTRATION_OPEN = False
+    SITE_ID = 1
+    ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+    ACCOUNT_EMAIL_REQUIRED = True
+    ACCOUNT_USERNAME_REQUIRED = False
+    ACCOUNT_AUTHENTICATION_METHOD = "email"
+    
+    
+    REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.BasicAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ],
+
+    "DEFAULT_THROTTLE_CLASSES": [
+        "blog.api.throttling.AnonSustainedThrottle",
+        "blog.api.throttling.AnonBurstThrottle",
+        "blog.api.throttling.UserSustainedThrottle",
+        "blog.api.throttling.UserBurstThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "anon_sustained": "500/day",
+        "anon_burst": "10/minute",
+        "user_sustained": "5000/day",
+        "user_burst": "100/minute",
+    },
+    
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+        "PAGE_SIZE": 2,
+
+    "DEFAULT_FILTER_BACKENDS": [
+            "django_filters.rest_framework.DjangoFilterBackend",
+            "rest_framework.filters.OrderingFilter",
+        
+        ],    
+    
+    }
+
+    SIMPLE_JWT = {
+        "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
+        "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
+    }    
+
+    MEDIA_ROOT = BASE_DIR / "media"
+    MEDIA_URL = "/media/"
   
 class Prod(Dev):
     DEBUG = False
